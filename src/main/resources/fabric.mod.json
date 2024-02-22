@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "chunker",
+  "version": "${version}",
+  "name": "Chunk Loader Persistence",
+  "description": "Keeps chunk loaders running across server restarts.",
+  "authors": ["OffKilterMC"],
+  "contact": {
+    "issues": "https://github.com/OffKilterMC/ChunkLoaderPersistence/issues",
+    "sources": "https://github.com/OffKilterMC/ChunkLoaderPersistence"
+  },
+  "license": "MIT",
+  "icon": "assets/chunkloaderpersistence/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.offkiltermc.chunkloaderpersistence.ChunkLoaderPersistence"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "~${minecraft_version}"
+  },
+  "accessWidener" : "chunkloaderpersistence.accesswidener"
+}
