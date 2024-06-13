@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.5-SNAPSHOT"
+    id("fabric-loom") version "1.6-SNAPSHOT"
     id("org.jetbrains.kotlin.jvm") version "1.8.0"
 }
 
@@ -30,8 +30,7 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.8.3+kotlin.1.7.10")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.8+kotlin.1.9.0")
 }
 
 tasks.named<Copy>("processResources") {
@@ -46,7 +45,7 @@ tasks.named<Copy>("processResources") {
     }
 }
 
-val targetJavaVersion = 17
+val targetJavaVersion = 21
 
 tasks.named<JavaCompile>("compileJava") {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
@@ -61,6 +60,12 @@ java {
     // if it is present.
     // If you remove this line, sources will not be generated.
     withSourcesJar()
+}
+
+kotlin {
+    // for some reason, this is needed to build with gradle 8.8
+    // and java 21, and `jvmToolchain(21)` does not work.
+    jvmToolchain(17)
 }
 
 tasks.named<Jar>("jar") {
