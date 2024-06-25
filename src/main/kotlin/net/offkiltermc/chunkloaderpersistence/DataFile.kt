@@ -66,7 +66,7 @@ class DataFile() {
             val root = JsonParser.parseReader(filePath(server).toFile().reader())
             for (entry in root.asJsonObject.entrySet()) {
                 val list = decodeTickInfoList(entry.value.asJsonArray)
-                map[ResourceLocation(entry.key)] = list
+                map[ResourceLocation.parse(entry.key)] = list
             }
 
             return map
