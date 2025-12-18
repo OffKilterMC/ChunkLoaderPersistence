@@ -1,9 +1,14 @@
 package net.offkiltermc.chunkloaderpersistence
 
+import com.mojang.brigadier.CommandDispatcher
 import com.mojang.logging.LogUtils
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStopping
+import net.minecraft.commands.CommandBuildContext
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -18,6 +23,13 @@ class ChunkLoaderPersistence : ModInitializer {
             )
         })
         ServerLifecycleEvents.SERVER_STOPPING.register(ServerStopping { server: MinecraftServer -> serverStopping(server) })
+
+        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher: CommandDispatcher<CommandSourceStack>, registryAccess: CommandBuildContext, environment: Commands.CommandSelection ->
+            TicketCommands.register(
+                dispatcher
+            )
+        })
+
     }
 
     companion object {
@@ -30,12 +42,7 @@ class ChunkLoaderPersistence : ModInitializer {
                     map[dimension]?.let { tickets ->
                         tickets.forEach {
                             LOGGER.info("Restoring portal ticket for $it in $dimension")
-                            level.chunkSource.addRegionTicket(
-                                TicketType.PORTAL,
-                                it.chunkPos,
-                                3,
-                                it.blockPos
-                            )
+                            level.chunkSource.addTicketWithRadius(TicketType.PORTAL, it.chunkPos, 3)
                         }
                     }
                 }
@@ -46,9 +53,8 @@ class ChunkLoaderPersistence : ModInitializer {
             val map = mutableMapOf<ResourceLocation, List<TicketInfo>>()
 
             for (level in server.allLevels) {
-                level.chunkSource.chunkMap.chunks
                 val dm = level.chunkSource.chunkMap.distanceManager
-                val tt = dm.tickingTicketsTracker
+                val tt = dm.ticketStorage
                 val tickets = tt.tickets
                 val list: MutableList<TicketInfo> = ArrayList()
                 for (key in tickets.keys) {
@@ -56,7 +62,7 @@ class ChunkLoaderPersistence : ModInitializer {
                     val s = tickets[key]
                     for (t in s) {
                         if (t.type === TicketType.PORTAL) {
-                            list.add(TicketInfo(pos, t.key as BlockPos))
+                            list.add(TicketInfo(pos, BlockPos.of(key)))
                         }
                     }
                 }

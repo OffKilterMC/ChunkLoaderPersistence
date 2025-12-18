@@ -1,7 +1,4 @@
 accessWidener	v1	named
 
-accessible method net/minecraft/server/level/ChunkMap getChunks ()Ljava/lang/Iterable;
-accessible class net/minecraft/server/level/ChunkMap$DistanceManager
-accessible field net/minecraft/server/level/DistanceManager tickingTicketsTracker Lnet/minecraft/server/level/TickingTracker;
-accessible field net/minecraft/server/level/TickingTracker tickets Lit/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap;
-accessible field net/minecraft/server/level/Ticket key Ljava/lang/Object;
+accessible field net/minecraft/server/level/DistanceManager ticketStorage Lnet/minecraft/world/level/TicketStorage;
+accessible field net/minecraft/world/level/TicketStorage tickets Lit/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap;

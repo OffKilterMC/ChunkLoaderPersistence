@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "1.6-SNAPSHOT"
-    id("org.jetbrains.kotlin.jvm") version "1.8.0"
+    id("fabric-loom") version "1.14-SNAPSHOT"
+    id("org.jetbrains.kotlin.jvm") version "2.0.0"
 }
 
 val modVersion = properties["mod_version"] as String
@@ -9,12 +9,15 @@ val loaderVersion = properties["loader_version"] as String
 val mavenGroup = properties["maven_group"] as String
 val fabricVersion = properties["fabric_version"] as String
 val archivesBaseName = properties["archives_base_name"] as String
+val fabricKotlinVersion = properties["fabric_kotlin_version"] as String
 
 version = modVersion
 group = mavenGroup
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://maven.fabricmc.net/") }
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -23,14 +26,12 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${minecraftVersion}")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.8+kotlin.1.9.0")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
 }
 
 tasks.named<Copy>("processResources") {
@@ -65,7 +66,7 @@ java {
 kotlin {
     // for some reason, this is needed to build with gradle 8.8
     // and java 21, and `jvmToolchain(21)` does not work.
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 tasks.named<Jar>("jar") {
