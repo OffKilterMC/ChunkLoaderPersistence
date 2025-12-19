@@ -10,7 +10,7 @@ import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.core.BlockPos
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.level.ChunkPos
@@ -38,7 +38,7 @@ class ChunkLoaderPersistence : ModInitializer {
         private fun serverStarted(server: MinecraftServer) {
             DataFile.INSTANCE.load(server)?.let { map ->
                 server.allLevels.forEach { level ->
-                    val dimension = level.dimension().location()
+                    val dimension = level.dimension().identifier()
                     map[dimension]?.let { tickets ->
                         tickets.forEach {
                             LOGGER.info("Restoring portal ticket for $it in $dimension")
@@ -50,7 +50,7 @@ class ChunkLoaderPersistence : ModInitializer {
         }
 
         private fun serverStopping(server: MinecraftServer) {
-            val map = mutableMapOf<ResourceLocation, List<TicketInfo>>()
+            val map = mutableMapOf<Identifier, List<TicketInfo>>()
 
             for (level in server.allLevels) {
                 val dm = level.chunkSource.chunkMap.distanceManager
@@ -67,7 +67,7 @@ class ChunkLoaderPersistence : ModInitializer {
                     }
                 }
 
-                map[level.dimension().location()] = list
+                map[level.dimension().identifier()] = list
             }
 
             LOGGER.info("Saving portal tickets")

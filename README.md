@@ -6,6 +6,9 @@ This mod keeps your chunk loaders running across restarts. It saves any active p
 the world is shut down and restores them when the world comes back up. No more having to kick start the chunk
 loaders across your world to get things working again.
 
+These days this is mostly for any old worlds with chunk loaders you might have built. These days you can 
+usually just use ender pearls in stasis instead.
+
 While servers don't shut down often, single-player worlds do and this will be especially handy in that
 scenario.
 

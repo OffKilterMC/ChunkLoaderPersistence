@@ -2,7 +2,7 @@ package net.offkiltermc.chunkloaderpersistence
 
 import com.google.gson.*
 import com.mojang.logging.LogUtils
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.level.storage.LevelResource
 import java.nio.file.Path
@@ -47,7 +47,7 @@ class DataFile() {
         return server.getWorldPath(LevelResource.ROOT).resolve("portal_tickets.json")
     }
 
-    fun save(data: Map<ResourceLocation, List<TicketInfo>>, server: MinecraftServer) {
+    fun save(data: Map<Identifier, List<TicketInfo>>, server: MinecraftServer) {
         try {
             val jsonData = data.toJson()
             val writer = filePath(server).toFile().writer()
@@ -60,13 +60,13 @@ class DataFile() {
         }
     }
 
-    fun load(server: MinecraftServer): Map<ResourceLocation, List<TicketInfo>>? {
-        val map = mutableMapOf<ResourceLocation, List<TicketInfo>>()
+    fun load(server: MinecraftServer): Map<Identifier, List<TicketInfo>>? {
+        val map = mutableMapOf<Identifier, List<TicketInfo>>()
         try {
             val root = JsonParser.parseReader(filePath(server).toFile().reader())
             for (entry in root.asJsonObject.entrySet()) {
                 val list = decodeTickInfoList(entry.value.asJsonArray)
-                map[ResourceLocation.parse(entry.key)] = list
+                map[Identifier.parse(entry.key)] = list
             }
 
             return map

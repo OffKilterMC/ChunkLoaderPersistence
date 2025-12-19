@@ -20,7 +20,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": ">=1.21.9 <=1.21.10",
+    "minecraft": "1.21.11",
     "fabric-language-kotlin": ">=1.10.8+kotlin.1.9.0"
   },
   "accessWidener" : "chunkloaderpersistence.accesswidener"

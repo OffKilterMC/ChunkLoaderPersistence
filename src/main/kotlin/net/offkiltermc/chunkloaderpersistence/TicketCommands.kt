@@ -11,11 +11,7 @@ object TicketCommands {
 
     fun register(commandDispatcher: CommandDispatcher<CommandSourceStack>) {
         val builder = Commands.literal("tickets")
-            .requires { commandSourceStack: CommandSourceStack ->
-                commandSourceStack.hasPermission(
-                    2
-                )
-            }
+            .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
             .then(
                 Commands.literal("loaded")
                     .executes { context: CommandContext<CommandSourceStack> ->
